@@ -57,6 +57,17 @@ public class PetController {
         );
     }
 
+    @SchemaMapping
+    public Mono<Person> ownerWithException(Pet pet) {
+        if (pet.ownerID() == null) {
+            throw new ObjectNotFoundException();
+        }
+
+        return Mono.just(
+                new Person(pet.ownerID(), "Owner of " + pet.name(), 30)
+        );
+    }
+
     @MutationMapping
     public Mono<Pet> updatePetName(@Argument String id, @Argument String name) {
         Pet pet = petOfIds.get(id);

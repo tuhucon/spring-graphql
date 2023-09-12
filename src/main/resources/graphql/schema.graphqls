@@ -3,6 +3,7 @@ type Pet {
     name: String
     color: String
     owner(default: Boolean = true): Person
+    ownerWithException: Person
 }
 
 type Person {
