@@ -1,0 +1,22 @@
+type Pet {
+    id: ID!
+    name: String
+    color: String
+    owner(default: Boolean = true): Person
+}
+
+type Person {
+    id: ID!
+    name: String
+    age: Int
+}
+
+type Query {
+    pets: [Pet]!
+    findPet(id: ID!): Pet
+}
+
+type Mutation {
+    updatePetName(id: ID!, name: String): Pet
+    updateOwnerName(id: ID!, name: String): Person
+}
