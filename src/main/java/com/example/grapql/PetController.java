@@ -3,6 +3,7 @@ package com.example.grapql;
 import graphql.Mutable;
 import jakarta.annotation.PostConstruct;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.BatchMapping;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
@@ -40,21 +41,31 @@ public class PetController {
         return Mono.just(pet);
     }
 
-    @SchemaMapping
-    public Mono<Person> owner(Pet pet, @Argument(name = "default") Boolean getDefault) {
-        if (pet.ownerID() == null) {
-            if (getDefault == true) {
-                return Mono.just(
-                        new Person("0", "Default", 0)
-                );
-            } else {
-                return Mono.empty();
-            }
-        }
+//    @SchemaMapping
+//    public Mono<Person> owner(Pet pet, @Argument(name = "default") Boolean getDefault) {
+//        if (pet.ownerID() == null) {
+//            if (getDefault == true) {
+//                return Mono.just(
+//                        new Person("0", "Default", 0)
+//                );
+//            } else {
+//                return Mono.empty();
+//            }
+//        }
+//
+//        return Mono.just(
+//                new Person(pet.ownerID(), "Owner of " + pet.name(), 30)
+//        );
+//    }
 
-        return Mono.just(
-                new Person(pet.ownerID(), "Owner of " + pet.name(), 30)
-        );
+    @BatchMapping(maxBatchSize = 2)
+    public Mono<Map<Pet, Person>> owner(List<Pet> pets) {
+        System.out.println("get owner by Batch");
+        Map<Pet, Person> personByPet = new HashMap<>();
+        pets.forEach(pet -> {
+            personByPet.put(pet, new Person(pet.ownerID(), "owner of " + pet.name(), 30));
+        });
+        return Mono.just(personByPet);
     }
 
     @SchemaMapping
