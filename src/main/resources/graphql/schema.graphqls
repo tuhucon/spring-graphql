@@ -13,7 +13,7 @@ type Person {
 }
 
 type Query {
-    pets: [Pet]!
+    pets: [Pet!]
     findPet(id: ID!): Pet
 }
 

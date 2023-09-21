@@ -63,7 +63,11 @@ public class PetController {
         System.out.println("get owner by Batch");
         Map<Pet, Person> personByPet = new HashMap<>();
         pets.forEach(pet -> {
-            personByPet.put(pet, new Person(pet.ownerID(), "owner of " + pet.name(), 30));
+            if (pet.ownerID() != null) {
+                personByPet.put(pet, new Person(pet.ownerID(), "owner of " + pet.name(), 30));
+            } else {
+                personByPet.put(pet, new Person("0", "default", 0));
+            }
         });
         return Mono.just(personByPet);
     }
