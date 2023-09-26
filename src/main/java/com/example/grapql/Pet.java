@@ -1,5 +1,7 @@
 package com.example.grapql;
 
-public record Pet(String id, String name, String color, String ownerID) {
+import lombok.With;
+
+public record Pet(@With String id, String name, String color, String ownerID) {
 
 }
